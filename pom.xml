@@ -1,7 +1,7 @@
-<project 
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>substrate</groupId>
     <artifactId>tracker</artifactId>
@@ -9,7 +9,7 @@
     <version>0.0.1</version>
     <name>Substrate Simple Tracker</name>
     <url>http://maven.apache.org</url>
-    
+
     <properties>
         <junit.version>4.11</junit.version>
         <guava.version>13.0.1</guava.version>
@@ -17,10 +17,12 @@
         <mysql.version>5.1.22</mysql.version>
         <hibernate.version>4.1.8.Final</hibernate.version>
         <shiro.version>1.2.1</shiro.version>
+        <slf4j.version>1.7.2</slf4j.version>
+        <tomcat.version>7.0.34</tomcat.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <!-- Useful utility library from Google -->
@@ -28,49 +30,49 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
-        
+
         <dependency>
             <!-- JAX-RS - REST service framework -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-servlet</artifactId>
             <version>${jersey.version}</version>
         </dependency>
-        
+
         <dependency>
             <!-- JAX-RS - JSON support for Jersey -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-json</artifactId>
             <version>${jersey.version}</version>
         </dependency>
-        
+
         <dependency>
             <!-- MySQL database driver -->
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
         </dependency>
-        
+
         <dependency>
             <!-- ORM (JPA2 implementation) -->
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
-        
+
         <dependency>
             <!-- Role Based Access Control framework -->
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
             <version>${shiro.version}</version>
         </dependency>
-        
+
         <dependency>
             <!-- Support for RBAC in web applications -->
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-web</artifactId>
             <version>${shiro.version}</version>
         </dependency>
-        
+
         <dependency>
             <!-- REST API testing framework -->
             <groupId>com.jayway.restassured</groupId>
@@ -78,7 +80,7 @@
             <version>1.7.1</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <!-- Unit testing framework -->
             <groupId>junit</groupId>
@@ -86,15 +88,52 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <!-- Integration testing framework -->
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <!-- Logging facade/abstraction -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- The following dependencies are for running Arquillian tests in an embedded tomcat container -->
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-embedded-7</artifactId>
+            <version>1.0.0.CR4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>${tomcat.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${tomcat.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-logging-juli</artifactId>
+            <version>${tomcat.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -106,93 +145,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
-    <profiles>
-        <profile>
-            <!-- Default profile -->
-            <id>default</id>
-            
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            
-            <!-- Exclude integration tests by default -->
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/integration/**/*Test.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    
-        <profile>
-            <!-- Embedded Tomcat for Arquillian tests -->
-            <id>integration-tests</id>
-            
-            <properties>
-                <tomcat.version>7.0.34</tomcat.version>
-                <slf4j.version>1.7.2</slf4j.version>
-            </properties>
-            
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.arquillian.container</groupId>
-                    <artifactId>arquillian-tomcat-embedded-7</artifactId>
-                    <version>1.0.0.CR4</version>
-                    <scope>test</scope>
-                </dependency>
-                
-                <dependency>
-                    <groupId>org.apache.tomcat.embed</groupId>
-                    <artifactId>tomcat-embed-core</artifactId>
-                    <version>${tomcat.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-                
-                <dependency>
-                    <groupId>org.apache.tomcat.embed</groupId>
-                    <artifactId>tomcat-embed-jasper</artifactId>
-                    <version>${tomcat.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-                
-                <dependency>
-                    <groupId>org.apache.tomcat.embed</groupId>
-                    <artifactId>tomcat-embed-logging-juli</artifactId>
-                    <version>${tomcat.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-                
-                <dependency>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-                    <version>${slf4j.version}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-            
-            <!-- Re-includes the integration tests -->
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <includes>
-                                <include>**/integration/**/*Test.java</include>
-                            </includes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-    
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
@@ -201,7 +154,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12.4</version>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

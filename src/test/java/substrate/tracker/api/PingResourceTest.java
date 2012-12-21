@@ -1,4 +1,4 @@
-package substrate.tracker.test.integration.api;
+package substrate.tracker.api;
 
 import java.io.File;
 
@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import com.jayway.restassured.RestAssured;
 
 import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
 
 @RunWith(Arquillian.class)
 public class PingResourceTest {
@@ -26,18 +25,13 @@ public class PingResourceTest {
     
     @Deployment
     public static WebArchive setupDeployment() {
-        return ShrinkWrap.create(WebArchive.class, "tracker.war")
-            .setWebXML(new File("src/main/webapp/WEB-INF/web.xml"));
+        return ShrinkWrap.create(WebArchive.class, "tracker.war").
+                setWebXML(new File("src/main/webapp/WEB-INF/web.xml"));
     }
     
     @Test
     @RunAsClient
     public void pingReturnsSuccessfulResponse() {
-        expect()
-            .statusCode(200)
-            .and()
-            .body(equalTo("I'm awake!"))
-            .when()
-            .get("/api/ping");
+        expect().statusCode(200).when().get("/api/ping");
     }
 }
