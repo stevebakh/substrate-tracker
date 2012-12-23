@@ -13,7 +13,7 @@ List of technologies in use:
 * [Arquillian](http://arquillian.org/)
 * [RestAssured](http://code.google.com/p/rest-assured/)
 * [Hamcrest](http://code.google.com/p/hamcrest/)
-* [JUnit](https://github.com/kentbeck/junit/wiki)
+* [TestNG](http://www.testng.org/)
 * [Maven](https://maven.java.net/)
 
 
