@@ -11,12 +11,13 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <junit.version>4.11</junit.version>
+        <testng.version>6.7</testng.version>
         <guava.version>13.0.1</guava.version>
         <jersey.version>1.16</jersey.version>
         <mysql.version>5.1.22</mysql.version>
         <hibernate.version>4.1.8.Final</hibernate.version>
         <shiro.version>1.2.1</shiro.version>
+        <restassured.version>1.7.2</restassured.version>
         <slf4j.version>1.7.2</slf4j.version>
         <tomcat.version>7.0.34</tomcat.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -77,22 +78,22 @@
             <!-- REST API testing framework -->
             <groupId>com.jayway.restassured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>1.7.1</version>
+            <version>${restassured.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <!-- Unit testing framework -->
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <!-- Integration testing framework -->
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
+            <groupId>org.jboss.arquillian.testng</groupId>
+            <artifactId>arquillian-testng-container</artifactId>
             <scope>test</scope>
         </dependency>
 

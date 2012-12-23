@@ -13,43 +13,49 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/projects/{projectId}/issues")
-@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class IssuesResource {
     @GET
     public Response getIssues(
             @QueryParam("offset") final Integer offset,
             @QueryParam("limit") final Integer limit,
-            @PathParam("projectId") final Long projectId) {
+            @PathParam("projectId") final Long projectId
+    ) {
         return Response.ok().build();
     }
-    
+
     @POST
-    public Response createIssue(@PathParam("projectId") final Long projectId) {
+    public Response createIssue(
+            @PathParam("projectId") final Long projectId
+    ) {
         return Response.ok().build();
     }
-    
+
     @GET
     @Path("/{issueId}")
     public Response getIssue(
             @PathParam("projectId") final Long projectId,
-            @PathParam("issueId") final Long issueId) {
+            @PathParam("issueId") final Long issueId
+    ) {
         return Response.ok().build();
     }
-    
+
     @DELETE
     @Path("/{issueId}")
     public Response deleteIssue(
             @PathParam("projectId") final Long projectId,
-            @PathParam("issueId") final Long issueId) {
+            @PathParam("issueId") final Long issueId
+    ) {
         return Response.ok().build();
     }
-    
+
     @PUT
     @Path("/{issueId}")
     public Response updateIssue(
             @PathParam("projectId") final Long projectId,
-            @PathParam("issueId") final Long issueId) {
+            @PathParam("issueId") final Long issueId
+    ) {
         return Response.ok().build();
     }
 }
