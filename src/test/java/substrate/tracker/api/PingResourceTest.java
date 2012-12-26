@@ -12,12 +12,12 @@ import com.jayway.restassured.RestAssured;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.jayway.restassured.RestAssured.*;
+import static com.jayway.restassured.RestAssured.expect;
 
 public class PingResourceTest extends Arquillian {
     @BeforeClass
     public void setRestAssuredDefaults() {
-        RestAssured.basePath = "/tracker";
+        RestAssured.basePath = "/tracker/api";
         RestAssured.port = 8228;
     }
 
@@ -30,6 +30,6 @@ public class PingResourceTest extends Arquillian {
     @Test
     @RunAsClient
     public void pingReturnsSuccessfulResponse() {
-        expect().statusCode(200).when().get("/api/ping");
+        expect().statusCode(200).when().get("/ping");
     }
 }

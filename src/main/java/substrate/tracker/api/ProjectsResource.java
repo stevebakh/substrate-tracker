@@ -1,5 +1,7 @@
 package substrate.tracker.api;
 
+import substrate.tracker.dto.ProjectDTO;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -10,14 +12,18 @@ import javax.ws.rs.core.Response;
 public class ProjectsResource {
     @GET
     public Response getProjects(
-            @QueryParam("limit") @DefaultValue("10") final Integer limit,
-            @QueryParam("offset") @DefaultValue("0") final Integer offset
+            @QueryParam("limit") final int limit,
+            @QueryParam("offset") final int offset
     ) {
+        if (limit < 0 || offset < 0) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
         return Response.ok().build();
     }
 
     @POST
-    public Response createProject() {
+    public Response createProject(final ProjectDTO projectDto) {
         return Response.ok().build();
     }
 
@@ -35,7 +41,10 @@ public class ProjectsResource {
 
     @PUT
     @Path("/{projectId}")
-    public Response updateProject(@PathParam("projectId") final Long projectId) {
+    public Response updateProject(
+            @PathParam("projectId") final Long projectId,
+            final ProjectDTO projectDto
+    ) {
         return Response.ok().build();
     }
 }
