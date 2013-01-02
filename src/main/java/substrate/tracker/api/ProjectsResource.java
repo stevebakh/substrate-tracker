@@ -5,26 +5,31 @@ import substrate.tracker.dto.ProjectDTO;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 
 @Path("/projects")
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class ProjectsResource {
+
     @GET
     public Response getProjects(
-            @QueryParam("limit") final int limit,
-            @QueryParam("offset") final int offset
+            @QueryParam("limit") @DefaultValue("10") final int limit,
+            @QueryParam("offset") @DefaultValue("0") final int offset
     ) {
         if (limit < 0 || offset < 0) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
+
+        //projectService.doSomething();
 
         return Response.ok().build();
     }
 
     @POST
     public Response createProject(final ProjectDTO projectDto) {
-        return Response.ok().build();
+        return null;
+        //return Response.created(URI.create("123")).build();
     }
 
     @GET

@@ -1,10 +1,13 @@
 package substrate.tracker.api;
 
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.response.Response;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.testng.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -13,6 +16,8 @@ import java.io.File;
 
 import static com.jayway.restassured.RestAssured.expect;
 import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.containsString;
 
 /**
  * Integration tests for the ProjectsResource class
@@ -22,7 +27,18 @@ public class ProjectsResourceTest extends Arquillian {
     @BeforeClass
     public void setRestAssuredDefaults() {
         RestAssured.basePath = "/tracker/api";
+        RestAssured.requestContentType(ContentType.JSON);
         RestAssured.port = 8228;
+    }
+
+    @BeforeClass
+    public void setupTestDataSource() {
+
+    }
+
+    @AfterClass
+    public void teardownTestDataSource() {
+
     }
 
     @Deployment
@@ -43,11 +59,10 @@ public class ProjectsResourceTest extends Arquillian {
     public void serviceReturnsJsonContentTypeByDefault() {
         expect().
                 statusCode(200).
-                header("Content-Type", "application/json").
+                header("Content-Type", ContentType.JSON.toString()).
                 when().
                 get("/projects");
     }
-
 
     /**
      * Make sure the endpoints can return the appropriate response
@@ -91,7 +106,10 @@ public class ProjectsResourceTest extends Arquillian {
      */
     @Test(enabled = false)
     public void getListOfProjectsWithoutOffsetAndLimit() {
-
+        expect().
+                statusCode(200).
+                when().
+                get("/projects");
     }
 
     /**
@@ -99,8 +117,13 @@ public class ProjectsResourceTest extends Arquillian {
      * projects defined in the limit parameter.
      */
     @Test(enabled = false)
-    public void getListOfProjectsWithDefinedLimit() {
-
+    public void getListOfProjectsWithDefinedLimit(final String limit) {
+        given().
+                queryParam("limit", limit).
+                expect().
+                statusCode(200).
+                when().
+                get("/projects");
     }
 
     /**
@@ -181,7 +204,12 @@ public class ProjectsResourceTest extends Arquillian {
      */
     @Test(enabled = false)
     public void getNonExistentProjectReturns404Response() {
-
+        given().
+                pathParam("projectId", "1234").
+                expect().
+                statusCode(404).
+                when().
+                get("/projects/{projectId}");
     }
 
     /**
@@ -208,11 +236,26 @@ public class ProjectsResourceTest extends Arquillian {
 
     /**
      * The /projects endpoint should return a 201 Created HTTP response code
-     * on success, along with some information about how to access the project.
+     * on success, along with a working link to the newly created project.
      */
-    @Test(enabled = false)
-    public void createProjectReturns201Response() {
+    @Test
+    public void createProjectReturns201ResponseAndValidLocationOfCreatedResource() {
+        // first, ensure the create call works as expected
+        final Response response = given().
+                header("Content-Type", ContentType.JSON.toString()).
+                body("{\"title\": \"Test Project\"}").
+                expect().
+                statusCode(201).
+                header("Location", notNullValue()).
+                when().
+                post("/projects");
 
+        // now make sure the URI returned in the Location header works
+        final String body = expect().
+                statusCode(200).
+                body(containsString("Test Project")).
+                when().
+                get(response.getHeader("Location")).asString();
     }
 
     /**
@@ -303,13 +346,15 @@ public class ProjectsResourceTest extends Arquillian {
             final String mediaType,
             final String contentBody
     ) {
-        expect().
+        given().
+                pathParam("projectId", "1234").
+                expect().
                 statusCode(400).
                 when().
                 request().
                 header("Content-Type", mediaType).
                 body(contentBody).
-                put("/projects/123");
+                put("/projects/{projectId}");
     }
 
     /**
@@ -334,7 +379,7 @@ public class ProjectsResourceTest extends Arquillian {
      * The /projects/{projectId} endpoint should return a 401 Unauthorised HTTP response
      * when attempting to update a project when the client is not authenticated.
      */
-    @Test(enabled = true)
+    @Test(enabled = false)
     public void updateProjectWhenNotAuthenticatedReturns401Response() {
 
     }
@@ -395,8 +440,8 @@ public class ProjectsResourceTest extends Arquillian {
     @DataProvider
     public Object[][] supportedMediaTypes() {
         return new Object[][] {
-                {"application/xml"},
-                {"application/json"}
+                {ContentType.JSON.getAcceptHeader()},
+                {ContentType.XML.getAcceptHeader()}
         };
     }
 
@@ -416,8 +461,8 @@ public class ProjectsResourceTest extends Arquillian {
     @DataProvider
     public Object[][] malformedContentBody() {
         return new Object[][] {
-                {"application/xml", "broken<malformed></xml>"},
-                {"application/json", "broken{malformed:[}=json"}
+                {ContentType.XML.toString(), "broken<malformed></xml>"},
+                {ContentType.JSON.toString(), "broken{malformed:[}=json"}
         };
     }
 
