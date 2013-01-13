@@ -1,4 +1,4 @@
-package substrate.tracker.api.exception;
+package substrate.tracker.api.provider;
 
 import com.sun.jersey.api.ParamException;
 

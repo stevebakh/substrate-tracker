@@ -3,16 +3,9 @@ package substrate.tracker.api;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.Response;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.testng.Arquillian;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.io.File;
 
 import static com.jayway.restassured.RestAssured.expect;
 import static com.jayway.restassured.RestAssured.given;
@@ -22,29 +15,12 @@ import static org.hamcrest.Matchers.containsString;
 /**
  * Integration tests for the ProjectsResource class
  */
-public class ProjectsResourceTest extends Arquillian {
+public class ProjectsResourceIntegrationIT {
 
     @BeforeClass
     public void setRestAssuredDefaults() {
         RestAssured.basePath = "/tracker/api";
         RestAssured.requestContentType(ContentType.JSON);
-        RestAssured.port = 8228;
-    }
-
-    @BeforeClass
-    public void setupTestDataSource() {
-
-    }
-
-    @AfterClass
-    public void teardownTestDataSource() {
-
-    }
-
-    @Deployment
-    public static WebArchive setupDeployment() {
-        return ShrinkWrap.create(WebArchive.class, "tracker.war").
-                setWebXML(new File("src/main/webapp/WEB-INF/web.xml"));
     }
 
 

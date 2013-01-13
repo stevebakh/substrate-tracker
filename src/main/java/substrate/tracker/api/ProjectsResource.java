@@ -1,16 +1,23 @@
 package substrate.tracker.api;
 
 import substrate.tracker.dto.ProjectDTO;
+import substrate.tracker.service.ProjectService;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 
 @Path("/projects")
+@Stateless
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class ProjectsResource {
+
+    @EJB
+    private ProjectService projectService;
 
     @GET
     public Response getProjects(
@@ -20,8 +27,6 @@ public class ProjectsResource {
         if (limit < 0 || offset < 0) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-
-        //projectService.doSomething();
 
         return Response.ok().build();
     }
