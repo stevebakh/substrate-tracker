@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "project")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ProjectDTO {
-    @XmlElement
     private Long id;
     
     @XmlElement(required = true)
