@@ -8,9 +8,10 @@ List of technologies in use:
 ----------------------------
 
 * Java
+* [Glassfish (using EJBs and CDI)](http://glassfish.java.net/)
 * [Jersey (JAX-RS implementation)](jersey.java.net)
 * [Hibernate (JPA2 implementation)](http://www.hibernate.org/)
-* [Arquillian](http://arquillian.org/)
+* [Cargo](http://cargo.codehaus.org/)
 * [RestAssured](http://code.google.com/p/rest-assured/)
 * [Hamcrest](http://code.google.com/p/hamcrest/)
 * [TestNG](http://www.testng.org/)
