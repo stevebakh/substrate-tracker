@@ -11,9 +11,11 @@ import static com.jayway.restassured.RestAssured.expect;
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 /**
- * Integration tests for the ProjectsResource class
+ * Integration tests for the ProjectsResource class.
  */
 public class ProjectsResourceIntegrationIT {
 
@@ -77,29 +79,17 @@ public class ProjectsResourceIntegrationIT {
 
 
     /**
-     * The /projects endpoint should use a default offset and limit value
-     * if a GET is made without those parameters.
-     */
-    @Test(enabled = false)
-    public void getListOfProjectsWithoutOffsetAndLimit() {
-        expect().
-                statusCode(200).
-                when().
-                get("/projects");
-    }
-
-    /**
      * The /projects endpoint should return (at most) the number of
      * projects defined in the limit parameter.
      */
-    @Test(enabled = false)
+    @Test(dataProvider = "validLimitValues")
     public void getListOfProjectsWithDefinedLimit(final String limit) {
-        given().
-                queryParam("limit", limit).
-                expect().
-                statusCode(200).
-                when().
-                get("/projects");
+        given()
+                .queryParam("limit", limit)
+                .expect()
+                .statusCode(200)
+                .when()
+                .get("/projects");
     }
 
     /**
@@ -117,14 +107,14 @@ public class ProjectsResourceIntegrationIT {
      *
      * @param limit The value to pass in the limit parameter
      */
-    @Test(dataProvider = "invalidLimitAndOffsetValues")
+    @Test(dataProvider = "invalidLimitOrOffsetValues")
     public void getProjectsWithInvalidLimitReturns400Response(final String limit) {
-        given().
-                queryParam("limit", limit).
-                expect().
-                statusCode(400).
-                when().
-                get("/projects");
+        given()
+                .queryParam("limit", limit)
+                .expect()
+                .statusCode(400)
+                .when()
+                .get("/projects");
     }
 
     /**
@@ -133,7 +123,7 @@ public class ProjectsResourceIntegrationIT {
      *
      * @param offset The value to pass in the offset parameter
      */
-    @Test(dataProvider = "invalidLimitAndOffsetValues")
+    @Test(dataProvider = "invalidLimitOrOffsetValues")
     public void getProjectsWithInvalidOffsetReturns400Response(final String offset) {
         given().
                 queryParam("offset", offset).
@@ -227,11 +217,11 @@ public class ProjectsResourceIntegrationIT {
                 post("/projects");
 
         // now make sure the URI returned in the Location header works
-        final String body = expect().
+        expect().
                 statusCode(200).
                 body(containsString("Test Project")).
                 when().
-                get(response.getHeader("Location")).asString();
+                get(response.getHeader("Location"));
     }
 
     /**
@@ -443,7 +433,16 @@ public class ProjectsResourceIntegrationIT {
     }
 
     @DataProvider
-    public Object[][] invalidLimitAndOffsetValues() {
+    public Object[][] validLimitValues() {
+        return new Object[][] {
+                {"0"},
+                {"1"},
+                {"3"}
+        };
+    }
+
+    @DataProvider
+    public Object[][] invalidLimitOrOffsetValues() {
         return new Object[][] {
                 {"abc"},
                 {"x8x"},

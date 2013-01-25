@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout>
+            <Pattern>[%level] %date - %logger{36} - %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>../logs/substrate.tracker.log</file>
+        <layout>
+            <Pattern>[%level] %date - %logger{36} - %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <logger name="substrate.tracker" level="DEBUG">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

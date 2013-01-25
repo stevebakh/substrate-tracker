@@ -14,6 +14,9 @@ import javax.ws.rs.ext.Provider;
  */
 @Provider
 public class ParameterExceptionMapper implements ExceptionMapper<ParamException> {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Response toResponse(ParamException exception) {
         return Response.status(Response.Status.BAD_REQUEST).build();

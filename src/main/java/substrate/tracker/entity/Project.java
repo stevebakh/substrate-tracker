@@ -5,10 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "project")
+@NamedQuery(name = "allProjects", query = "SELECT p FROM Project p ORDER BY p.title ASC")
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

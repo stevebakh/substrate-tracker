@@ -17,6 +17,7 @@
         <!--<shiro.version>1.2.1</shiro.version>-->
         <restassured.version>1.7.2</restassured.version>
         <glassfish.version>3.1.2</glassfish.version>
+        <logback.version>1.0.9</logback.version>
         <cargo.plugin.version>1.3.1</cargo.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -97,6 +98,13 @@
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <!-- Logging - use slf4j with logback as the backend -->
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
         </dependency>
     </dependencies>
 
